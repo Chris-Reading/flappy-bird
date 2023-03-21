@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Flappy Bird</string>
+    <string name="background">Background</string>
+    <string name="background_base">Background Base</string>
+    <string name="play_button">Start</string>
+    <string name="levels_button">Levels</string>
+    <string name="statistics_button">Statistics</string>
+</resources>
