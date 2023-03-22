@@ -1,113 +1,112 @@
 package com.example.flappybird;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ImageView;
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Random;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+/**
+ * This class represents the main game screen. It uses randomly generated features when creating
+ * the level's structure.
+ *
+ * @class PlayActivity
+ */
 
 public class PlayActivity extends AppCompatActivity {
-    private ImageView bird;
-    private float x, y, vy;
-    private boolean isTapped = false;
-    private int currentFrame = 0;
-    private final int[] birdFrames = {R.drawable.yellowbird_down, R.drawable.yellowbird_up};
-    private final int frameInterval = 100; // 100ms per frame
-    private Handler handler;
-    private ImageView pipeTop, pipeBottom;
-    private int pipeX = 1000;
-    private final int pipeGap = 300;
-    private int pipeSpeed = 8;
-    private int pipeTopY = 0;
-    private int pipeBottomY = 0;
-    private final int pipeWidth = 100;
+
+    // Create variables for widgets in the content view.
+
+    public static TextView txt_score, txt_best_score,txt_score_over;
+    public static RelativeLayout rl_game_over;
+    public static Button btn_start, btn_home;
+    private static GameView gv;
+
+    /**
+     * Called from the "MainActivity" activity. This is where the content's view is set and
+     * where actions behind buttons can be set.
+     *
+     * @param savedInstanceState the bundle containing the activity's previously frozen state.
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // Defines variable which contains information about the windows dimensions etc.
+        DisplayMetrics dm = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        // Defines the "Constants" class' variables to the screen dimensions in regards to pixels.
+        Constants.SCREEN_WIDTH = dm.widthPixels;
+        Constants.SCREEN_HEIGHT = dm.heightPixels;
+
         setContentView(R.layout.activity_play);
 
-        ImageView backgroundImage = (ImageView) findViewById(R.id.background_image);
-        Random random = new Random();
-        int randomNumber = random.nextInt(2);
-        if (randomNumber == 0) {
-            backgroundImage.setImageResource(R.drawable.background_day);
-        } else {
-            backgroundImage.setImageResource(R.drawable.background_night);
-        }
+        // Defines variables from widgets in the content view.
+        txt_score = findViewById(R.id.txt_score);
+        txt_best_score = findViewById(R.id.txt_best_score);
+        txt_score_over = findViewById(R.id.txt_score_over);
+        rl_game_over = findViewById(R.id.rl_game_over);
+        btn_start = findViewById(R.id.btn_start);
+        btn_home = findViewById(R.id.btn_home);
+        gv = findViewById(R.id.gv);
 
-        bird = findViewById(R.id.yellowbird);
-        pipeTop = findViewById(R.id.pipetop);
-        pipeBottom = findViewById(R.id.pipebottom);
-        x = bird.getX();
-        y = bird.getY();
-        vy = 0;
-        handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        // Sets buttons OnClickListener so they lead to specific screens in the application.
+
+        btn_start.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * This method "starts" the game and changes the visibility of widgets to their
+             * necessary states.
+             * @param v represents the widget that was clicked to start the onClick event.
+             */
+
             @Override
-            public void run() {
-                update();
-                handler.postDelayed(this, 10);
-            }
-        }, 10);
-        findViewById(android.R.id.content).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    isTapped = true;
-                }
-                return true;
+            public void onClick(View v) {
+                gv.setStart(true);
+                txt_score.setVisibility(View.VISIBLE);
+                btn_start.setVisibility(View.INVISIBLE);
+                btn_home.setVisibility(View.INVISIBLE);
             }
         });
-    }
 
-    private void update() {
-        updateBird();
-        updatePipes();
-    }
+        btn_home.setOnClickListener(new View.OnClickListener() {
 
-    private void updateBird() {
-        // Update bird position and velocity
-        vy += 0.5; // Add gravity
-        y += vy;
-        bird.setY(y);
-        // Update bird animation
-        currentFrame = (currentFrame + 1) % birdFrames.length;
-        bird.setImageResource(birdFrames[currentFrame]);
-        // Handle tap event
-        if (isTapped) {
-            isTapped = false;
-            // Make the bird hop up
-            vy = -10; // Change vertical velocity
-        }
-    }
+            /**
+             * This method returns to the activity screen "MainActivity" when pressed.
+             * @param v represents the widget that was clicked to start the onClick event.
+             */
 
-    private void updatePipes() {
-        // Update pipe position
-        pipeX -= pipeSpeed;
-        pipeTop.setX(pipeX);
-        pipeBottom.setX(pipeX);
-        // Check if the pipe is off screen and move it to the right
-        if (pipeX + pipeWidth < 0) {
-            pipeX = 1000;
-            // Randomize pipe position
-            Random rand = new Random();
-            int range = (int) (findViewById(android.R.id.content).getHeight() - pipeGap - 200);
-            pipeTopY = rand.nextInt(range) + 100;
-            pipeBottomY = pipeTopY + pipeGap;
-            pipeTop.setY(pipeTopY - pipeTop.getHeight());
-            pipeBottom.setY(pipeBottomY);
-        }
-        // Check for collision with pipes
-        if (pipeX <= x + bird.getWidth() && pipeX + pipeWidth >= x) {
-            if (y <= pipeTopY || y + bird.getHeight() >= pipeBottomY) {
-                // Game over
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PlayActivity.this, MainActivity.class);
+                startActivity(intent);
             }
-        }
+        });
+
+        rl_game_over.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * This method "resets" the game and changes the visibility of widgets to their
+             * necessary states. It does not restart the game, only resets it.
+             * @param v represents the widget that was clicked to start the onClick event.
+             */
+
+            @Override
+            public void onClick(View v) {
+                btn_start.setVisibility(View.VISIBLE);
+                btn_home.setVisibility(View.VISIBLE);
+                rl_game_over.setVisibility(View.INVISIBLE);
+                gv.setStart(false);
+                gv.reset();
+            }
+        });
     }
 }

@@ -1,38 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_day"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="3dp"
-        android:text="Button"
-        app:layout_constraintBaseline_toBaselineOf="@+id/button2"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="home"
+        android:fontFamily="@font/mainfont"
+        android:padding="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/button_colours"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/txt_levels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="50sp"
+        android:text="LEVELS"
+        android:fontFamily="@font/mainfont"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"/>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btn_repetition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="252dp"
-        android:layout_marginEnd="1dp"
-        android:text="Button"
-        app:layout_constraintEnd_toStartOf="@+id/button3"
-        app:layout_constraintStart_toEndOf="@+id/button"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="350dp"
+        android:text="Repetition"
+        android:fontFamily="@font/mainfont"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_colours"
+        android:textColor="@android:color/white" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btn_reverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="3dp"
-        android:text="Button"
-        app:layout_constraintBaseline_toBaselineOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button2" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginTop="350dp"
+        android:layout_marginLeft="250dp"
+        android:text="Reverse"
+        android:fontFamily="@font/mainfont"
+        android:background="@drawable/button_colours"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/btn_gravity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="350dp"
+        android:layout_marginLeft="50dp"
+        android:text="Gravity"
+        android:fontFamily="@font/mainfont"
+        android:background="@drawable/button_colours"
+        android:textColor="@android:color/white" />
+</RelativeLayout>
